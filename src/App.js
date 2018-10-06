@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Main from "./pages/main/Main"
+import MainPage from "./pages/main/MainPage"
 
 class App extends Component {
     render() {
         return (
-            <Main/>
+            <MainPage/>
         )
     }
   // render() {

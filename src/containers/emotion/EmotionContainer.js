@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { ReactMic } from 'react-mic';
 import { Button, ButtonToolbar } from "react-bootstrap"
+import './EmotionContainer.css';
 
-export default class Main extends Component {
+export default class EmotionContainer extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -30,7 +31,7 @@ export default class Main extends Component {
 
     render() {
         return (
-            <div>
+            <div className="EmotionContainer">
                 <ReactMic
                     record={this.state.streaming}
                     className="sound-wave"
