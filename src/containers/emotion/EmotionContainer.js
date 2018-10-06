@@ -13,9 +13,16 @@ export default class EmotionContainer extends Component {
 
     startStreaming = () => {
         console.log('Start streaming...');
-        this.setState({
-            streaming: true
-        })
+        navigator.getUserMedia(
+            { audio: true },
+            () => {
+                console.log("Has microphone")
+                this.setState({
+                    streaming: true
+                })
+            },
+            () => { alert("Does not have microphone") }
+        )
     }
 
     stopStreaming = () => {
