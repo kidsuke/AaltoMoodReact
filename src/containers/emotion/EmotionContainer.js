@@ -5,6 +5,7 @@ import './EmotionContainer.css';
 import {fetchEmotions} from "../../api/AaltoMoodApi";
 import {Subject} from "rxjs";
 import {throttleTime} from "rxjs/operators"
+import Emotion from "./emoji/Emotion";
 
 const audioDataSource = new Subject();
 const mediaConstraints = {audio: true, video: false};
@@ -13,9 +14,18 @@ export default class EmotionContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            streaming: false
+            streaming: false,
+            emotion: null,
+            audioDataSourceSubscription: null,
         };
+    }
+
+    componentDidMount() {
         this.bindAudioSource()
+    }
+
+    componentWillUnmount() {
+        this.unbindAudioSource()
     }
 
     startStreaming = () => {
@@ -47,19 +57,50 @@ export default class EmotionContainer extends Component {
     bindAudioSource = () => {
         // Listen the the audio source and fetch new emotion here.
         // In order not to spam server, only emit the latest data after every {number} second(s).
-        audioDataSource
-            .pipe(throttleTime(5000))
+        let subscription = audioDataSource
+            .pipe(throttleTime(2000))
             .subscribe(audioData => this.fetchEmotions(audioData))
+
+        this.setState({
+            audioDataSourceSubscription: subscription
+        })
+    };
+
+    unbindAudioSource = () => {
+        this.state.audioDataSourceSubscription.unsubscribe()
     };
 
     fetchEmotions = (audioData) => {
         fetchEmotions("longvu", audioData)
-            .subscribe(res => console.log(res));
+            .subscribe(res => {
+                console.log("Fetching emotion succeeded");
+                console.log(res);
+                this.processEmotion(res)
+            });
+    };
+
+    processEmotion = (emotion) => {
+        const max = {
+            maxKey: null,
+            maxValue: null,
+        };
+
+        Object.keys(emotion).forEach(value => {
+            if (!max.maxKey || (max.maxValue <= emotion[value])) {
+                max.maxKey = value;
+                max.maxValue = emotion[value]
+            }
+        });
+
+        this.setState({
+           emotion: max.maxKey
+        });
     };
 
     render() {
         return (
             <div className="EmotionContainer">
+                <Emotion emotion={this.state.emotion}/>
                 <ReactMic
                     record={this.state.streaming}
                     className="sound-wave"
