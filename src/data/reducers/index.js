@@ -1,6 +1,8 @@
 import {combineReducers} from "redux";
 import emotionReducer from "./EmotionReducer"
+import tipsReducer from "./TipsReducer"
 
 export default combineReducers({
-    emotion: emotionReducer
+    emotionState: emotionReducer,
+    tipsState: tipsReducer
 })

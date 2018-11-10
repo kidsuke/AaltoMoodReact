@@ -1,0 +1,22 @@
+.Tip-prioritized {
+    background-color: white;
+    border-radius: 10px;
+}
+
+.Tip {
+    background-color: white;
+    border-radius: 10px;
+    opacity: 0.7;
+}
+
+.Tip-content-prioritized {
+    padding: 8px;
+    color: black;
+}
+
+.Tip-content {
+    padding: 8px;
+    color: black;
+    font-size: 15px;
+    opacity: 0.7;
+}

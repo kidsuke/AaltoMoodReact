@@ -17,7 +17,7 @@ class EmotionContainer extends Component {
         super(props);
         this.state = {
             streaming: false,
-            emotion: null,
+            emotionState: null,
             audioDataSourceSubscription: null,
         };
     }
@@ -59,7 +59,7 @@ class EmotionContainer extends Component {
     bindAudioSource = () => {
         const { fetchEmotion } = this.props;
 
-        // Listen the the audio source and fetch new emotion here.
+        // Listen the the audio source and fetch new emotionState here.
         // In order not to spam server, only emit the latest data after every {number} second(s).
         let subscription = audioDataSource
             .pipe(throttleTime(2000))
@@ -97,7 +97,7 @@ class EmotionContainer extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        emotion: state.emotion.emotion
+        emotion: state.emotionState.emotion
     }
 };
 
