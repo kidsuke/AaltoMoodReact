@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import MainPage from "./pages/main/MainPage"
+import {Provider} from "react-redux";
+import configureStore from "./data/ConfigureStore"
+
+const store = configureStore();
 
 class App extends Component {
     render() {
         return (
-            <MainPage/>
+            <Provider store={store}>
+                <MainPage/>
+            </Provider>
         )
     }
   // render() {

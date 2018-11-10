@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import { ReactMic } from 'react-mic';
 import { Button, ButtonToolbar } from "react-bootstrap"
 import './EmotionContainer.css';
-import {fetchEmotions} from "../../api/AaltoMoodApi";
 import {Subject} from "rxjs";
 import {throttleTime} from "rxjs/operators"
-import Emotion from "./emoji/Emotion";
+import Emotion from "../../components/emotion/Emotion";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import fetchEmotionUseCase from "../../actions/emotion/FetchEmotionUseCase";
 
 const audioDataSource = new Subject();
 const mediaConstraints = {audio: true, video: false};
 
-export default class EmotionContainer extends Component {
+class EmotionContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -55,11 +57,13 @@ export default class EmotionContainer extends Component {
     };
 
     bindAudioSource = () => {
+        const { fetchEmotion } = this.props;
+
         // Listen the the audio source and fetch new emotion here.
         // In order not to spam server, only emit the latest data after every {number} second(s).
         let subscription = audioDataSource
             .pipe(throttleTime(2000))
-            .subscribe(audioData => this.fetchEmotions(audioData))
+            .subscribe(audioData => fetchEmotion("longvu", audioData));
 
         this.setState({
             audioDataSourceSubscription: subscription
@@ -70,37 +74,12 @@ export default class EmotionContainer extends Component {
         this.state.audioDataSourceSubscription.unsubscribe()
     };
 
-    fetchEmotions = (audioData) => {
-        fetchEmotions("longvu", audioData)
-            .subscribe(res => {
-                console.log("Fetching emotion succeeded");
-                console.log(res);
-                this.processEmotion(res)
-            });
-    };
-
-    processEmotion = (emotion) => {
-        const max = {
-            maxKey: null,
-            maxValue: null,
-        };
-
-        Object.keys(emotion).forEach(value => {
-            if (!max.maxKey || (max.maxValue <= emotion[value])) {
-                max.maxKey = value;
-                max.maxValue = emotion[value]
-            }
-        });
-
-        this.setState({
-           emotion: max.maxKey
-        });
-    };
-
     render() {
+        const { emotion } = this.props;
+
         return (
             <div className="EmotionContainer">
-                <Emotion emotion={this.state.emotion}/>
+                <Emotion emotion={emotion}/>
                 <ReactMic
                     record={this.state.streaming}
                     className="sound-wave"
@@ -115,3 +94,17 @@ export default class EmotionContainer extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        emotion: state.emotion.emotion
+    }
+};
+
+ const mapDispatchToProps = (dispatch) => {
+     return {
+         fetchEmotion: bindActionCreators(fetchEmotionUseCase, dispatch)
+     }
+ };
+
+export default connect(mapStateToProps, mapDispatchToProps)(EmotionContainer)

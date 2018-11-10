@@ -403,7 +403,7 @@ export default Button; // Don’t forget to use export default!
 
 ```js
 import React, { Component } from 'react';
-import Button from './Button'; // Import a component from another file
+import Button from './Button'; components
 
 class DangerButton extends Component {
   render() {
@@ -688,7 +688,7 @@ One way to add SVG files was described in the section above. You can also import
 import { ReactComponent as Logo } from './logo.svg';
 const App = () => (
   <div>
-    {/* Logo is an actual React component */}
+    {components}
     <Logo />
   </div>
 );
