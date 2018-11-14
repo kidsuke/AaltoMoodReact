@@ -1,15 +1,15 @@
 import {fetchEmotions} from "../../api/AaltoMoodApi";
 import {storeEmotionActionCreator} from "./EmotionActionCreators";
+import {map, tap, ignoreElements} from "rxjs/operators"
 
 const fetchEmotionUseCase = (username, audioData) => {
     return (dispatch) => {
-        fetchEmotions(username, audioData)
-            .subscribe(res => {
-                console.log("Fetching emotion succeeded");
-                console.log(res);
-                const emotion = processEmotion(res);
-                dispatch(storeEmotionActionCreator(emotion))
-            });
+        return fetchEmotions(username, audioData)
+            .pipe(
+                map(res => processEmotion(res)),
+                tap(emotion => dispatch(storeEmotionActionCreator(emotion))),
+                ignoreElements()
+            );
     }
 };
 
