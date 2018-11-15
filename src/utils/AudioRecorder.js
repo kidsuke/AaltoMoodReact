@@ -1,6 +1,6 @@
 import Recorder from 'recorder-js';
 import {Subject} from "rxjs";
-import {throttleTime} from "rxjs/operators";
+import {filter, map, bufferTime} from "rxjs/operators";
 
 class AudioRecorder {
     constructor() {
@@ -12,7 +12,7 @@ class AudioRecorder {
 
         const audioContext =  new (window.AudioContext || window.webkitAudioContext)();
         this.recorder = new Recorder(audioContext, {
-            onAnalysed: data => this.audioSource.next(new Blob(data.data, {type: "audio/wav"}))
+            onAnalysed: data => this.audioSource.next(data.data)
         });
     }
 
@@ -28,7 +28,12 @@ class AudioRecorder {
                 // Listen the the audio source and fetch new emotionState here.
                 // In order not to spam server, only emit the latest data after every {number} second(s).
                 this.audioSourceSubscription = this.audioSource
-                    .pipe(throttleTime(2000))
+                    .pipe(
+                        bufferTime(5000),
+                        filter(bufferedData => bufferedData.length > 0),
+                        map(bufferedData => bufferedData.reduce((accumulator, currentData) => accumulator.concat(currentData))),
+                        map(data => new Blob(data, {type: "audio/wav"}))
+                    )
                     .subscribe(audioData => {
                         console.log(audioData);
                         if (this.onAudioDataReceived) {

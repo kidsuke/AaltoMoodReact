@@ -7,7 +7,10 @@ const fetchEmotionUseCase = (username, audioData) => {
         return fetchEmotions(username, audioData)
             .pipe(
                 map(res => processEmotion(res)),
-                tap(emotion => dispatch(storeEmotionActionCreator(emotion))),
+                tap(emotion => {
+                    console.log("Emotion received: " + emotion);
+                    dispatch(storeEmotionActionCreator(emotion))
+                }),
                 ignoreElements()
             );
     }
