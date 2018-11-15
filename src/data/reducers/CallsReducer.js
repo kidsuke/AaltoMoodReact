@@ -19,15 +19,18 @@ const startCall = (state, action) => {
     if (!state.onGoingCall) {
         state.onGoingCall = {}
     }
-    state.calls.push(state.onGoingCall);
 
-    return state;
+    return {
+        ...state,
+        calls: state.calls.concat(state.onGoingCall)
+    }
 };
 
 const endCall = (state, action) => {
-    state.onGoingCall = null;
-
-    return state;
+    return {
+        ...state,
+        onGoingCall: null
+    };
 };
 
 const addEmotionToOnGoingCall = (state, action) => {
@@ -40,5 +43,7 @@ const addEmotionToOnGoingCall = (state, action) => {
         state.onGoingCall.emotionHistory.push(payload.emotion)
     }
 
-    return state;
+    return {
+        ...state
+    };
 };
