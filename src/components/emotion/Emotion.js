@@ -27,7 +27,7 @@ const Emotion = (props) => {
 
     return (
         <div className="Emotion">
-            <img alt="Emotion" src={src}/>
+            <img alt="Emotion" src={src} width="150px" height="150px"/>
         </div>
     )
 };
