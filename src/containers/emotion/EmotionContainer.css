@@ -6,3 +6,9 @@
     align-items: center;
     flex-grow: 1;
 }
+
+.EmotionContainer-timer {
+    display: flex;
+    align-self: end;
+    margin-right: 16px;
+}

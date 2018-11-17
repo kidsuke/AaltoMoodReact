@@ -9,6 +9,8 @@ import EmotionBar from "../../components/emotion/EmotionBar";
 import startCallUseCase from "../../actions/call/StartCallUseCase";
 import endCallUseCase from "../../actions/call/EndCallUseCase";
 import AudioRecorder from "../../utils/AudioRecorder";
+import Timer from "../../components/timer/Timer";
+import TimerContainer from "../timer/TimerContainer";
 
 class EmotionContainer extends Component {
     constructor(props) {
@@ -94,6 +96,9 @@ class EmotionContainer extends Component {
 
         return (
             <div className="EmotionContainer">
+                <div className="EmotionContainer-timer">
+                    <TimerContainer/>
+                </div>
                 <Emotion emotion={emotion}/>
                 <EmotionBar emotionProportion={this.getEmotionProportion(onGoingCall)}/>
                 <ButtonToolbar>
