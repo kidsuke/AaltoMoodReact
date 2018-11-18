@@ -17,6 +17,7 @@ class EmotionContainer extends Component {
         super(props);
         this.recorder = new AudioRecorder();
         this.fetchEmotionInterval = null;
+        this.fetchEmotionSubscription = null;
     }
 
     startCall = (startCallUseCase) => {
@@ -37,7 +38,7 @@ class EmotionContainer extends Component {
     fetchEmotion = (fetchEmotionUseCase) => {
         this.recorder.getWAV()
             .then(blob => {
-                fetchEmotionUseCase("longvu", blob)
+                this.fetchEmotionSubscription = fetchEmotionUseCase("longvu", blob)
                     .subscribe(
                         () => {},
                         error => {console.log(error)},
@@ -54,7 +55,11 @@ class EmotionContainer extends Component {
                 () => {
                     console.log('Stop recording...');
                     this.recorder.stopRecording();
-                    clearInterval(this.fetchEmotionInterval)
+                    clearInterval(this.fetchEmotionInterval);
+                    if (this.fetchEmotionSubscription) {
+                        this.fetchEmotionSubscription.unsubscribe();
+                        this.fetchEmotionSubscription = null;
+                    }
                 }
             );
     };
