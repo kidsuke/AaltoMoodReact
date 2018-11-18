@@ -6,7 +6,10 @@ const fetchEmotionUseCase = (username, audioData) => {
     return (dispatch) => {
         return fetchEmotions(username, audioData)
             .pipe(
-                map(res => processEmotion(res)),
+                map(res => {
+                    console.log("Emotion received raw: " + JSON.stringify(res));
+                    return processEmotion(res)
+                }),
                 tap(emotion => {
                     console.log("Emotion received: " + emotion);
                     dispatch(storeEmotionActionCreator(emotion))
