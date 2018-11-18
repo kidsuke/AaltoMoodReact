@@ -9,7 +9,6 @@ import EmotionBar from "../../components/emotion/EmotionBar";
 import startCallUseCase from "../../actions/call/StartCallUseCase";
 import endCallUseCase from "../../actions/call/EndCallUseCase";
 import AudioRecorder from "../../utils/AudioRecorder";
-import Timer from "../../components/timer/Timer";
 import TimerContainer from "../timer/TimerContainer";
 
 class EmotionContainer extends Component {
@@ -117,12 +116,12 @@ const mapStateToProps = (state) => {
     }
 };
 
- const mapDispatchToProps = (dispatch) => {
-     return {
-         fetchEmotion: bindActionCreators(fetchEmotionUseCase, dispatch),
-         startCall: bindActionCreators(startCallUseCase, dispatch),
-         endCall: bindActionCreators(endCallUseCase, dispatch)
-     }
- };
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchEmotion: bindActionCreators(fetchEmotionUseCase, dispatch),
+        startCall: bindActionCreators(startCallUseCase, dispatch),
+        endCall: bindActionCreators(endCallUseCase, dispatch)
+    }
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmotionContainer)

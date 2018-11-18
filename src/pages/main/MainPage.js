@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './MainPage.css';
 import EmotionContainer from "../../containers/emotion/EmotionContainer"
 import TipsContainer from "../../containers/tip/TipsContainer"
 
-export default class MainPage extends Component {
+export default class MainPage extends React.Component {
+
     render() {
         return (
             <div className="MainPage">
@@ -12,4 +13,5 @@ export default class MainPage extends Component {
             </div>
         )
     }
+
 }

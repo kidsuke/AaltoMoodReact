@@ -3,6 +3,7 @@ import './App.css';
 import MainPage from "./pages/main/MainPage"
 import {Provider} from "react-redux";
 import configureStore from "./data/ConfigureStore"
+import SplashPage from "./pages/splash/SplashPage";
 
 const store = configureStore();
 
@@ -10,7 +11,9 @@ class App extends Component {
     render() {
         return (
             <Provider store={store}>
-                <MainPage/>
+                <div className="App">
+                    <SplashPage/>
+                </div>
             </Provider>
         )
     }
