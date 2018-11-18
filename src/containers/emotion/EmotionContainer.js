@@ -9,25 +9,55 @@ import EmotionBar from "../../components/emotion/EmotionBar";
 import startCallUseCase from "../../actions/call/StartCallUseCase";
 import endCallUseCase from "../../actions/call/EndCallUseCase";
 import AudioRecorder from "../../utils/AudioRecorder";
+import Recorder from 'recorder-js';
 import TimerContainer from "../timer/TimerContainer";
+import {bufferTime, filter, map} from "rxjs/operators";
 
 class EmotionContainer extends Component {
     constructor(props) {
         super(props);
         this.recorder = new AudioRecorder();
+        this.audioDataSubscription = null;
     }
 
     componentDidMount() {
-        const { fetchEmotion } = this.props;
-
-        this.recorder.setOnAudioDataReceivedListener(audioData => {
-            fetchEmotion("longvu", audioData).subscribe()
-        });
+        this.bindAudioData()
     }
 
     componentWillUnmount() {
-        this.recorder.setOnAudioDataReceivedListener(null)
+        this.unbindAudioData()
     }
+
+    bindAudioData = () => {
+        const { fetchEmotion, config } = this.props;
+
+        // Listen the the audio source and fetch new emotionState here.
+        // In order not to spam server, only emit the latest data after every {number} second(s).
+        this.audioDataSubscription = this.recorder.getAudioDataStream()
+            .pipe(
+                bufferTime(config.duration),
+                filter(bufferedData => bufferedData.length > 0),
+                map(bufferedData => bufferedData.reduce((accumulator, currentData) => accumulator.concat(currentData))),
+                map(data => new Blob(data, {type: "audio/wav"}))
+            )
+            .subscribe(audioData => {
+                //let t = Recorder.download(audioData, 'my-audio-file');
+                //console.log(t);
+                fetchEmotion("longvu", audioData)
+                    .subscribe(
+                        () => {},
+                        error => {console.log(error)},
+                        () => {}
+                    )
+            });
+    };
+
+    unbindAudioData = () => {
+        if (this.audioDataSubscription) {
+            this.audioDataSubscription.unsubscribe();
+            this.audioDataSubscription = null;
+        }
+    };
 
     startCall = (startCallUseCase) => {
         startCallUseCase()
@@ -110,6 +140,7 @@ class EmotionContainer extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        config: state.configState.config,
         emotion: state.emotionState.emotion,
         onGoingCall: state.callsState.onGoingCall
     }

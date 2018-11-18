@@ -1,10 +1,17 @@
 import {fetchConfig} from "../../api/AaltoMoodApi";
-import {ignoreElements} from "rxjs/operators";
+import {ignoreElements, tap} from "rxjs/operators";
+import {storeConfigActionCreator} from "./ConfigActionCreators";
 
 const fetchConfigUseCase = () => {
     return (dispatch) => {
         return fetchConfig()
-            .pipe(ignoreElements());
+            .pipe(
+                tap(config => {
+                    console.log("Config received: " + JSON.stringify(config));
+                    dispatch(storeConfigActionCreator(config))
+                }),
+                ignoreElements()
+            );
     }
 };
 

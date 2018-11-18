@@ -1,19 +1,23 @@
-import {STORE_EMOTION} from "../../actions/emotion/EmotionActionCreators";
-import {END_CALL, START_CALL} from "../../actions/call/CallActionCreators";
+import {STORE_CONFIG} from "../../actions/config/ConfigActionCreators";
 
 const initialState = {
-    inialized
+    config: {
+        duration: 5000
+    }
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case START_CALL: return startCall(state, action);
-        case END_CALL: return endCall(state, action);
-        case STORE_CONFIG: return addEmotionToOnGoingCall(state, action);
+        case STORE_CONFIG: return storeConfig(state, action);
         default: return state;
     }
 }
 
 const storeConfig = (state, action) => {
+    const { payload } = action;
 
-}
+    return {
+        ...state,
+        config: payload.config
+    }
+};
