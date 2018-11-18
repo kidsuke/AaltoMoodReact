@@ -2,10 +2,13 @@ import React from "react";
 import {HashLoader} from "react-spinners";
 import './SplashPage.css'
 import {defer, concat} from "rxjs";
-import {ignoreElements} from "rxjs/operators";
+import {ignoreElements, tap} from "rxjs/operators";
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import fetchConfigUseCase from "../../actions/config/FetchConfigUseCase";
+import {Redirect} from "react-router";
+import AudioRecorder from "../../utils/AudioRecorder";
+import setAuthenticationUseCase from "../../actions/authentication/SetAuthenticationUseCase";
 
 class SplashPage extends React.Component {
 
@@ -21,14 +24,19 @@ class SplashPage extends React.Component {
     }
 
     initialize = () => {
+        const { setAuthentication } = this.props;
+
         concat(
             this.askForMicrophonePermission(),
             this.fetchServerConfig()
         )
             .subscribe(
-                () => console.log("Done111"),
+                () => {},
                 error => {},
-                () => console.log("Complete222"))
+                () => {
+                    setAuthentication(true)
+                }
+            )
     };
 
     askForMicrophonePermission = () => {
@@ -38,7 +46,10 @@ class SplashPage extends React.Component {
             });
             return navigator.mediaDevices.getUserMedia({audio: true, video: false})
         })
-            .pipe(ignoreElements());
+            .pipe(
+                tap(stream => AudioRecorder.stream = stream),
+                ignoreElements()
+            );
     };
 
     fetchServerConfig = () => {
@@ -55,29 +66,37 @@ class SplashPage extends React.Component {
 
     render() {
         const { info } = this.state;
+        const { authenticated } = this.props;
 
-        return (
-            <div className="SplashPage">
-                <HashLoader
-                    sizeUnit={"px"}
-                    size={150}
-                    color={'#123abc'}
-                    loading={true}
-                />
-                <p className="SplashPage-info">{info}</p>
-            </div>
-        )
+        if (authenticated) {
+            return <Redirect to="/main"/>
+        } else {
+            return (
+                <div className="SplashPage">
+                    <HashLoader
+                        sizeUnit={"px"}
+                        size={150}
+                        color={'#123abc'}
+                        loading={true}
+                    />
+                    <p className="SplashPage-info">{info}</p>
+                </div>
+            )
+        }
     }
 
 }
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        authenticated: state.authenticationState.authenticated
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchConfig: bindActionCreators(fetchConfigUseCase, dispatch)
+        fetchConfig: bindActionCreators(fetchConfigUseCase, dispatch),
+        setAuthentication: bindActionCreators(setAuthenticationUseCase, dispatch)
     }
 };
 

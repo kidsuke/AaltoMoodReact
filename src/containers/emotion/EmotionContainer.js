@@ -20,7 +20,6 @@ class EmotionContainer extends Component {
     componentDidMount() {
         const { fetchEmotion } = this.props;
 
-        this.recorder.init();
         this.recorder.setOnAudioDataReceivedListener(audioData => {
             fetchEmotion("longvu", audioData).subscribe()
         });

@@ -3,6 +3,8 @@ import {Subject} from "rxjs";
 import {filter, map, bufferTime} from "rxjs/operators";
 
 class AudioRecorder {
+    static stream;
+
     constructor() {
         this.audioSource = new Subject();
 
@@ -10,17 +12,15 @@ class AudioRecorder {
 
         this.onAudioDataReceived = null;
 
+        // Initialize recorder
         const audioContext =  new (window.AudioContext || window.webkitAudioContext)();
         this.recorder = new Recorder(audioContext, {
             onAnalysed: data => this.audioSource.next(data.data)
         });
+        if (AudioRecorder.stream) {
+            this.recorder.init(AudioRecorder.stream)
+        }
     }
-
-    init = (config) => {
-        navigator.mediaDevices.getUserMedia({audio: true, video: false})
-            .then(stream => this.recorder.init(stream))
-            .catch(err => console.log('Unable to get stream...', err));
-    };
 
     startRecording = () => {
         this.recorder.start()
