@@ -19,6 +19,7 @@
     "react-spinners": "^0.4.7",
     "react-sweet-progress": "^1.1.2",
     "recorder-js": "^1.0.7",
+    "recorderjs": "^1.0.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.3.3"

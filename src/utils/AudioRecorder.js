@@ -17,19 +17,22 @@ class AudioRecorder {
 
     startRecording = () => {
         this.recorder.start()
-            .then(() => this.recording = true)
+             .then(() => this.recording = true)
     };
 
     stopRecording = () => {
         this.recorder.stop()
             .then(({blob, buffer}) => {
                 this.recording = false;
-            })
+            });
     };
 
     getWAV = () => {
         return new Promise((resolve) => {
             this.recorder.audioRecorder.exportWAV(blob => {
+                // Reset the buffer
+                this.stopRecording();
+                this.startRecording();
                 resolve(blob)
             });
         });
