@@ -1,5 +1,5 @@
-export const HAPPY_GIF = require('./happy.gif');
-export const SAD_GIF = require('./sadsmile.gif');
-export const NEUTRAL_GIF = require('./thinking.gif');
-export const ANGRY_GIF = require('./angry.gif');
-export const FEAR_GIF = require('./worried.gif');
+export const HAPPY_GIF = require('./happy.svg');
+export const SAD_GIF = require('./sad.svg');
+export const NEUTRAL_GIF = require('./confused.svg');
+export const ANGRY_GIF = require('./angry.svg');
+export const FEAR_GIF = require('./scare.svg');
