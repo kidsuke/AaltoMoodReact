@@ -22,6 +22,7 @@ const Emotion = (props) => {
             src = FEAR_GIF;
             break;
         default:
+            src = NEUTRAL_GIF;
             break;
     }
 
