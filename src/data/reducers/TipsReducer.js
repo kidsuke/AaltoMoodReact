@@ -46,19 +46,19 @@ const initialState = {
             id: 8,
             prioritized: false,
             type: "angry",
-            value: "End conversation"
+            value: "Try to end conversation and ask if another time would be better"
         },
         {
             id: 9,
             prioritized: true,
             type: "fear",
-            value: "Lulululul"
+            value: "Talk about more special benefits"
         },
         {
             id: 10,
             prioritized: false,
             type: "fear",
-            value: "Is it ok if we have feared customer...?"
+            value: "Find a story that can ensure product's quality"
         }
     ]
 };

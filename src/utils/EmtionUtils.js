@@ -43,7 +43,7 @@ export const getEmotionProportion = (emotions) => {
 export const getSatisfactionPoint = ({happy, neutral, sad, fear, angry}) => {
     const perfectSatisfaction = (happy + neutral + sad + fear + angry) * HAPPY_POINT;
     const realSatisfaction = happy * HAPPY_POINT + neutral * NEUTRAL_POINT + sad * SAD_POINT + fear * FEAR_POINT + angry * ANGRY_POINT;
-    const result = realSatisfaction * 100 / perfectSatisfaction;
+    const result = Math.round(realSatisfaction * 100 / perfectSatisfaction);
 
     return isNaN(result) ? 0 : result;
 };
