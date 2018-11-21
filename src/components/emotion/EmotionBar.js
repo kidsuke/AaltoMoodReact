@@ -4,32 +4,24 @@ import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
 import { emojify } from 'react-emoji';
 import PropTypes from 'prop-types'
-
-const HAPPY_POINT = 100;
-const NEUTRAL_POINT = 80;
-const SAD_POINT = 60;
-const FEAR_POINT = 40;
-const ANGRY_POINT = 20;
+import {ANGRY_POINT, FEAR_POINT, getSatisfactionPoint, NEUTRAL_POINT, SAD_POINT} from "../../utils/EmtionUtils";
 
 const EmotionBar = (props) => {
     const { emotionProportion } = props;
-    const { happy, neutral, sad, fear, angry } = emotionProportion;
 
-    const perfectSatisfaction = (happy + neutral + sad + fear + angry) * HAPPY_POINT;
-    const realSatisfaction = happy * HAPPY_POINT + neutral * NEUTRAL_POINT + sad * SAD_POINT + fear * FEAR_POINT + angry * ANGRY_POINT;
-    const satisfactionPercent = realSatisfaction * 100 / perfectSatisfaction;
+    const satisfactionPoint = getSatisfactionPoint(emotionProportion);
 
     let status;
-    if (isNaN(satisfactionPercent) || satisfactionPercent === 0) {
+    if (satisfactionPoint === 0) {
         status = 'default'
     } else {
-        if (satisfactionPercent > NEUTRAL_POINT) {
+        if (satisfactionPoint > NEUTRAL_POINT) {
             status = 'happy'
-        } else if (satisfactionPercent > SAD_POINT) {
+        } else if (satisfactionPoint > SAD_POINT) {
             status = 'neutral'
-        } else if (satisfactionPercent > FEAR_POINT) {
+        } else if (satisfactionPoint > FEAR_POINT) {
             status = 'sad'
-        } else if (satisfactionPercent > ANGRY_POINT) {
+        } else if (satisfactionPoint > ANGRY_POINT) {
             status = 'fear'
         } else {
             status = 'angry'
@@ -39,7 +31,7 @@ const EmotionBar = (props) => {
     return (
         <div className="EmotionBar">
             <Progress
-                percent={satisfactionPercent}
+                percent={satisfactionPoint}
                 status={status}
                 theme={{
                     happy: {

@@ -1,14 +1,28 @@
 .EmotionContainer {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 3;
     background-color: white;
+}
+
+.EmotionContainer-top {
+    display: flex;
+    align-self: end;
+    margin-right: 16px;
+    flex-grow: 1;
+}
+
+.EmotionContainer-center {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    flex-grow: 1;
+    flex-grow: 3;
 }
 
-.EmotionContainer-timer {
+.EmotionContainer-bottom {
     display: flex;
-    align-self: end;
-    margin-right: 16px;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 2;
 }

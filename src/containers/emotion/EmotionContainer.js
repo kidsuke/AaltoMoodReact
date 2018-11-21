@@ -10,11 +10,17 @@ import startCallUseCase from "../../actions/call/StartCallUseCase";
 import endCallUseCase from "../../actions/call/EndCallUseCase";
 import AudioRecorder from "../../utils/AudioRecorder";
 import TimerContainer from "../timer/TimerContainer";
+import CallDashboard from "../../components/dashboard/CallDashboard";
+import {getEmotionProportion} from "../../utils/EmtionUtils";
+import _ from 'underscore'
 
 class EmotionContainer extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            showCallDashboard: false
+        };
         this.recorder = new AudioRecorder();
         this.fetchEmotionInterval = null;
         this.fetchEmotionSubscription = null;
@@ -60,60 +66,53 @@ class EmotionContainer extends Component {
                         this.fetchEmotionSubscription.unsubscribe();
                         this.fetchEmotionSubscription = null;
                     }
+                    this.openCallDashboard()
                 }
             );
     };
 
-    getEmotionProportion = (onGoingCall) => {
-        let emotionProportion = {
-            happy: 0,
-            neutral: 0,
-            sad: 0,
-            fear: 0,
-            angry: 0
-        };
+    getCallEmotionProportion = (call) => {
+        return getEmotionProportion(call ? call.emotionHistory : []);
+    };
 
-        if (onGoingCall && onGoingCall.emotionHistory) {
-            onGoingCall.emotionHistory.forEach(emotion => {
-                switch (emotion) {
-                    case 'happy':
-                        emotionProportion.happy++;
-                        break;
-                    case 'neutral':
-                        emotionProportion.neutral++;
-                        break;
-                    case 'sad':
-                        emotionProportion.sad++;
-                        break;
-                    case 'fear':
-                        emotionProportion.fear++;
-                        break;
-                    case 'angry':
-                        emotionProportion.angry++;
-                        break;
-                    default:
-                        break;
-                }
-            })
-        }
+    openCallDashboard = () => {
+        this.setState({
+            showCallDashboard: true
+        })
+    };
 
-        return emotionProportion
+    closeCallDashboard = () => {
+        this.setState({
+            showCallDashboard: false
+        })
     };
 
     render() {
-        const { emotion, onGoingCall, startCall, endCall } = this.props;
+        const { emotion, onGoingCall, lastCall, startCall, endCall } = this.props;
+        const { showCallDashboard } = this.state;
 
         return (
             <div className="EmotionContainer">
-                <div className="EmotionContainer-timer">
+                <CallDashboard
+                    open={showCallDashboard}
+                    onClose={this.closeCallDashboard}
+                    emotionProportion={this.getCallEmotionProportion(lastCall)}
+                />
+                <div className="EmotionContainer-top">
                     <TimerContainer/>
                 </div>
-                <Emotion emotion={emotion}/>
-                <EmotionBar emotionProportion={this.getEmotionProportion(onGoingCall)}/>
-                <ButtonToolbar>
-                    <Button bsStyle="success" onClick={() => this.startCall(startCall)}>Start call</Button>
-                    <Button bsStyle="danger" onClick={() => this.endCall(endCall)}>End call</Button>
-                </ButtonToolbar>
+                <div className="EmotionContainer-center">
+                    <Emotion emotion={emotion}/>
+                    <EmotionBar emotionProportion={this.getCallEmotionProportion(onGoingCall)}/>
+                </div>
+                <div className="EmotionContainer-bottom">
+                    {
+                        !onGoingCall && <Button bsStyle="success" onClick={() => this.startCall(startCall)}>Start call</Button>
+                    }
+                    {
+                        onGoingCall && <Button bsStyle="danger" onClick={() => this.endCall(endCall)}>End call</Button>
+                    }
+                </div>
             </div>
         )
     }
@@ -124,7 +123,8 @@ const mapStateToProps = (state) => {
     return {
         config: state.configState.config,
         emotion: state.emotionState.emotion,
-        onGoingCall: state.callsState.onGoingCall
+        onGoingCall: state.callsState.onGoingCall,
+        lastCall: _.last(state.callsState.calls)
     }
 };
 
