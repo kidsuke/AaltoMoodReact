@@ -3,6 +3,7 @@ import './TipsContainer.css'
 import {connect} from "react-redux";
 import Tip from "../../components/tip/Tip";
 import posed, {PoseGroup} from "react-pose"
+import _ from 'underscore'
 
 const Box = posed.div({
     enter: {
@@ -41,7 +42,10 @@ class TipsContainer extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        tips: state.tipsState.tips.filter(tip => tip.type === state.emotionState.emotion)
+        tips: state.tipsState.tips
+            .filter(tip =>
+                state.callsState.onGoingCall && tip.type === _.last(state.callsState.onGoingCall.emotionHistory)
+            )
     }
 };
 

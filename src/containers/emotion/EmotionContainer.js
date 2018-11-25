@@ -113,7 +113,7 @@ class EmotionContainer extends Component {
                     <TimerContainer/>
                 </div>
                 <div className="EmotionContainer-center">
-                    <Emotion emotion={emotion}/>
+                    <Emotion emotion={onGoingCall ? _.last(onGoingCall.emotionHistory) : null}/>
                     {
                         onGoingCall &&
                         <EmotionBar emotionProportion={this.getCallEmotionProportion(onGoingCall)}/>
