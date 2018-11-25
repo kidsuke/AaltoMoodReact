@@ -13,6 +13,17 @@ import TimerContainer from "../timer/TimerContainer";
 import CallDashboard from "../../components/dashboard/CallDashboard";
 import {getEmotionProportion} from "../../utils/EmtionUtils";
 import _ from 'underscore'
+import EmotionGraph from "../../components/emotion/EmotionGraph";
+import posed from "react-pose"
+
+
+const Box = posed.div({
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { duration: 300 }
+    }
+});
 
 class EmotionContainer extends Component {
 
@@ -88,7 +99,7 @@ class EmotionContainer extends Component {
     };
 
     render() {
-        const { emotion, onGoingCall, lastCall, startCall, endCall } = this.props;
+        const { emotion, onGoingCall, lastCall, startCall, endCall, config } = this.props;
         const { showCallDashboard } = this.state;
 
         return (
@@ -103,7 +114,14 @@ class EmotionContainer extends Component {
                 </div>
                 <div className="EmotionContainer-center">
                     <Emotion emotion={emotion}/>
-                    <EmotionBar emotionProportion={this.getCallEmotionProportion(onGoingCall)}/>
+                    {
+                        onGoingCall &&
+                        <EmotionBar emotionProportion={this.getCallEmotionProportion(onGoingCall)}/>
+                    }
+                    {
+                        onGoingCall &&
+                        <EmotionGraph emotionHistory={onGoingCall.emotionHistory}/>
+                    }
                 </div>
                 <div className="EmotionContainer-bottom">
                     {

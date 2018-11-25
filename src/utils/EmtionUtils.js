@@ -47,3 +47,29 @@ export const getSatisfactionPoint = ({happy, neutral, sad, fear, angry}) => {
 
     return isNaN(result) ? 0 : result;
 };
+
+export const getEmotionPoint = (emotion) => {
+    let result = 0;
+
+    switch (emotion) {
+        case "happy":
+            result = HAPPY_POINT;
+            break;
+        case "neutral":
+            result = NEUTRAL_POINT;
+            break;
+        case "sad":
+            result = SAD_POINT;
+            break;
+        case "fear":
+            result = FEAR_POINT;
+            break;
+        case "angry":
+            result = ANGRY_POINT;
+            break;
+        default:
+            break;
+    }
+
+    return result;
+};
