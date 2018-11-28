@@ -34,6 +34,8 @@ const endCall = (state, action) => {
 };
 
 const addEmotionToOnGoingCall = (state, action) => {
+    console.log("Store emotion to on going call...");
+
     const { payload } = action;
 
     if (state.onGoingCall) {
@@ -43,7 +45,7 @@ const addEmotionToOnGoingCall = (state, action) => {
         state.onGoingCall.emotionHistory.push(payload.emotion)
     }
 
-    return {
-        ...state
-    };
+    return Object.assign({}, state, {
+        onGoingCall: Object.assign({}, state.onGoingCall)
+    });
 };

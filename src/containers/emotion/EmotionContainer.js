@@ -99,10 +99,11 @@ class EmotionContainer extends Component {
     };
 
     render() {
-        const { emotion, onGoingCall, lastCall, startCall, endCall, config } = this.props;
+        const { onGoingCall, lastCall, startCall, endCall } = this.props;
         const { showCallDashboard } = this.state;
 
         return (
+
             <div className="EmotionContainer">
                 <CallDashboard
                     open={showCallDashboard}
