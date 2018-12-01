@@ -39,7 +39,7 @@ const EmotionBar = (props) => {
                         color: '#4CAF50'
                     },
                     neutral: {
-                        symbol: emojify(':neutral_face:'),
+                        symbol: emojify(':simple_smile:'),
                         color: '#8BC34A'
                     },
                     sad: {
@@ -55,7 +55,7 @@ const EmotionBar = (props) => {
                         color: '#F44336'
                     },
                     default: {
-                        symbol: emojify(':no_mouth:')
+                        symbol: emojify(':neutral_face:')
                     }
                 }}
             />

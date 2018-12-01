@@ -1,6 +1,6 @@
 import React from "react";
 import Popup from "reactjs-popup";
-import {WINK_GIF} from "../../assets";
+import {CRYING_ICON, SMILE_ICON, WINK_ICON} from "../../assets";
 import "./CallDashboard.css"
 import PropTypes from "prop-types";
 import {getSatisfactionPoint} from "../../utils/EmtionUtils";
@@ -9,6 +9,7 @@ const CallDashboard = (props) => {
     const { open, onClose, emotionProportion } = props;
 
     const satisfactionPoint = getSatisfactionPoint(emotionProportion);
+    const review = getReviewFromEmotionPoint(satisfactionPoint);
 
     return (
         <Popup open={open} onClose={onClose} modal>
@@ -23,9 +24,9 @@ const CallDashboard = (props) => {
                 >
                     &times;
                 </button>
-                <img className="CallDashboard-content-emoji" alt="Emotion" src={WINK_GIF} width="150px" height="150px"/>
+                <img className="CallDashboard-content-emoji" alt="Emotion" src={review.emoji} width="150px" height="150px"/>
                 <p>Total satisfaction: {satisfactionPoint}</p>
-                <p>Keep up the good work!</p>
+                <p>{review.comment}</p>
                 <div className="CallDashboard-content-summary">
                     <h1>Summary</h1>
                     <p>Happy: {emotionProportion.happy}</p>
@@ -37,6 +38,27 @@ const CallDashboard = (props) => {
             </div>
         </Popup>
     )
+};
+
+const getReviewFromEmotionPoint = (point) => {
+    let emoji;
+    let comment;
+
+    if (point >= 80) {
+        emoji = SMILE_ICON;
+        comment = "Excellent job!";
+    } else if (point >= 50 && point < 80) {
+        emoji = WINK_ICON;
+        comment = "Keep up the good work!"
+    } else {
+        emoji = CRYING_ICON;
+        comment = "Try better next time..."
+    }
+
+    return {
+        emoji,
+        comment
+    }
 };
 
 CallDashboard.propTypes = {
