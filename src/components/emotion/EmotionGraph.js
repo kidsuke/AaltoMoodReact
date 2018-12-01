@@ -5,7 +5,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import am4themes_material from "@amcharts/amcharts4/themes/material";
 import PropTypes from "prop-types";
 import _ from 'underscore'
-import {getEmotionPoint} from "../../utils/EmtionUtils";
+import {getEmotionPoint, getEmotionProportion, getSatisfactionPoint} from "../../utils/EmtionUtils";
 
 class EmotionGraph extends React.Component {
 
@@ -120,8 +120,8 @@ class EmotionGraph extends React.Component {
         if (shouldAddDataPoint) {
             console.log("Add new data point...");
             this.realDataLength++;
-            const latestEmotion = _.last(emotionHistory);
-            nextDataPoint.value = getEmotionPoint(latestEmotion);
+            const emotionProportion = getEmotionProportion(emotionHistory);
+            nextDataPoint.value = getSatisfactionPoint(emotionProportion);
         } else {
             nextDataPoint.value = lastItem.valueY;
         }
