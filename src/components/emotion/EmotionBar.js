@@ -55,7 +55,7 @@ const EmotionBar = (props) => {
                         color: '#F44336'
                     },
                     default: {
-                        symbol: emojify(':speak_no_evil:')
+                        symbol: emojify(':no_mouth:')
                     }
                 }}
             />
