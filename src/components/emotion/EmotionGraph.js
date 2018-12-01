@@ -68,10 +68,9 @@ class EmotionGraph extends React.Component {
         valueAxis.strictMinMax = true;
         valueAxis.renderer.labels.template.fontSize = 20;
         valueAxis.renderer.inside = true;
-        valueAxis.renderer.minLabelPosition = 0.05;
-        valueAxis.renderer.maxLabelPosition = 0.95;
         valueAxis.renderer.axisFills.template.disabled = true;
         valueAxis.renderer.ticks.template.disabled = true;
+        valueAxis.renderer.labels.template.dy = 10;
         valueAxis.renderer.minGridDistance = 20;
         valueAxis.interpolationDuration = 500;
         valueAxis.rangeChangeDuration = 500;
